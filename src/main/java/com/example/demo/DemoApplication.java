@@ -6,11 +6,14 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableAsync
 @EnableScheduling
+@EnableAsync
 public class DemoApplication {
 
+
+
 	public static void main(String[] args) {
+//		System.out.println(QueueList.abtestList.isEmpty());/
 		SpringApplication.run(DemoApplication.class, args);
 	}
 

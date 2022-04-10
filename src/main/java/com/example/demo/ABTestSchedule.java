@@ -2,50 +2,70 @@ package com.example.demo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 @Component
 public class ABTestSchedule {
 
 
     private static Logger logger = LoggerFactory.getLogger(ABTestSchedule.class);
+    public AbTestService abTestService;
+
+    public Queue<Integer> ququ = new LinkedList<Integer>();
+    public List<HashMap<String ,Object>> maplist = new ArrayList<>();
+    public ABTestSchedule(AbTestService abTestService) {
+        this.abTestService = abTestService;
+
+//        for (int i = 0; i < 10; i++) {
+//            HashMap<String,Object> temp = new HashMap<>();
+//            temp.put("TEST_SEQ",i);
+//            temp.put("IS PROCESS",0);
+//            ququ.offer(temp);
+//        }
+
+        for (int i = 0; i <100 ; i++) {
+            HashMap<String,Object> test = new HashMap<>();
+            test.put("TEST_SEQ",(new Date().getTime()+i));
+            test.put("SEPC","REVIEW");
+            maplist.add(test);
+            ququ.offer((int) (new Date().getTime()+i));
+        }
+
+
+
+
+
+    }
+
+
 
     //    @Scheduled(fixedDelay = 10000,fixedDelayString = )fixedDelayString
 
 
-    @Scheduled(fixedDelay = 1000)
-    public HashMap<String ,Object> test(){
+    @Scheduled(fixedDelay = 2000)
+    public String test() throws InterruptedException {
 
-        Queue<HashMap<String,Object>> ququ = new LinkedList<>();
-        for(int i=0; i<2;i++){
-            HashMap<String,Object> tempMap = new HashMap<>();
-            tempMap.put("TEST_SEQ", new Date().getTime()+i);
-            tempMap.put("STAT","IN PROGRESS");
-            ququ.offer(tempMap);
+        if(ququ.isEmpty()){
+            logger.info("END");
+            return "end";
+        }else{
+            abTestService.treaddd(ququ.poll());
+            return "statt";
         }
 
 
-        return ququ.poll();
+//        if(ququ.poll().get("IS PROCESS").equals(0)){
+//
+//        }
+
+
     }
 
-    @Async
-    public void treaddd() throws InterruptedException {
-        Thread.sleep(10000);
-    }
 
-    @Async
 
-    public void alert() {
-
-        logger.info("현재 시간 : {}", new Date());
-        logger.info("");
-    }
 
 }
